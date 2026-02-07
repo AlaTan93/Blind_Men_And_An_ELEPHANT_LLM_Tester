@@ -37,6 +37,8 @@ This cross-platform GUI application allows you to compare responses from multipl
 
 To run the application:
 
+Set up .env using .env.template.
+
 ```bash
 uv run python main.py
 ```
