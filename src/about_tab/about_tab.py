@@ -1,5 +1,9 @@
 """About tab displaying application information."""
 import customtkinter as ctk
+import webbrowser
+import subprocess
+import sys
+from tkinter import messagebox
 
 
 class AboutTab:
@@ -13,6 +17,22 @@ class AboutTab:
         """
         self.parent = parent
         self.setup_ui()
+
+    def open_url(self, url):
+        """Open URL in browser with cross-platform support.
+
+        Args:
+            url: The URL to open
+        """
+        try:
+            if sys.platform == "linux":
+                # Use xdg-open on Linux for better compatibility
+                subprocess.Popen(["xdg-open", url])
+            else:
+                # Use webbrowser for Windows and macOS
+                webbrowser.open(url)
+        except Exception as e:
+            messagebox.showwarning("Web browser cannot be opened")
 
     def setup_ui(self):
         """Setup the about tab UI."""
@@ -38,28 +58,29 @@ class AboutTab:
                                     font=("Arial", 14))
         version_label.pack(pady=10)
 
-        # Description
-        description_text = """
+        # Description - Part 1
+        description_text_1 = """
         This application allows you to test and compare responses
         from multiple Large Language Models (LLMs) simultaneously.
 
         The name references the parable of the blind men and an elephant,
-        where each person perceives only part of the truth.
-        Similarly, different LLMs may provide different perspectives
-        on the same prompt.
+        and the paper titled: ELEPHANT: Measuring and understanding social sycophancy in LLMs"""
 
-        Features:
-        • Compare up to 10 LLM responses side-by-side
-        • Configurable model parameters
-        • Secure API key management
-        • Cross-platform compatibility
-        """
+        description_label_1 = ctk.CTkLabel(about_frame,
+                                          text=description_text_1,
+                                          font=("Arial", 12),
+                                          justify="center")
+        description_label_1.pack(pady=(10, 0))
 
-        description_label = ctk.CTkLabel(about_frame,
-                                        text=description_text,
-                                        font=("Arial", 12),
-                                        justify="center")
-        description_label.pack(pady=30)
+        # Clickable URL
+        url = "https://arxiv.org/abs/2505.13995v2"
+        url_label = ctk.CTkLabel(about_frame,
+                                 text=url,
+                                 font=("Arial", 12, "underline"),
+                                 text_color="#1f6aa5",
+                                 cursor="hand2")
+        url_label.pack(pady=5)
+        url_label.bind("<Button-1>", lambda e: self.open_url(url))
 
         # Footer
         footer_label = ctk.CTkLabel(about_frame,
