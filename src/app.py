@@ -14,8 +14,9 @@ class LLMTesterApp(ctk.CTk):
         super().__init__()
 
         # Configure window
-        self.title("LLM Tester - Blind Men and an Elephant")
+        self.title("LLM Tester - Blind Men and an ELEPHANT")
         self.geometry("1200x800")
+        self.minsize(1200, 800)
 
         # Set theme
         ctk.set_appearance_mode("dark")
