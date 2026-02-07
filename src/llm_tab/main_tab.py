@@ -152,9 +152,9 @@ class LLMMainTab:
 
     def _reconfigure_column_grid(self):
         """Reconfigure grid weights to ensure columns resize properly."""
-        # Reset all column weights
+        # Reset all column weights and clear uniform groups
         for i in range(self.max_columns):
-            self.columns_scroll_frame.grid_columnconfigure(i, weight=0)
+            self.columns_scroll_frame.grid_columnconfigure(i, weight=0, uniform="")
         # Set weights only for active columns
         for i in range(self.num_columns):
             self.columns_scroll_frame.grid_columnconfigure(i, weight=1, uniform="column")
