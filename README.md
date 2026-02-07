@@ -2,6 +2,10 @@
 
 Utilising ELEPHANT: Measuring and understanding social sycophancy in LLMs, the goal is to simultaneously test LLMs for sycophancy, and to score them via LLM-as-a-Judge and per human evaluation via UI.
 
+## Progress
+
+Still WIP. Not yet ready for use. UI is 95% done.
+
 ## Overview
 
 This cross-platform GUI application allows you to compare responses from multiple Large Language Models (LLMs) side-by-side. The name references the parable of the blind men and an elephant, where each person perceives only part of the truth. Similarly, different LLMs may provide different perspectives on the same prompt.
@@ -9,10 +13,7 @@ This cross-platform GUI application allows you to compare responses from multipl
 ## Features
 
 - **Multi-Model Comparison**: Test up to 10 LLM responses simultaneously
-- **Flexible Configuration**: Configurable model parameters for each column
-- **Secure API Management**: Password-protected API key storage with show/hide functionality
 - **Cross-Platform**: Built with Python 3.13 and CustomTkinter for Windows, macOS, and Linux
-- **Modern UI**: Clean, dark-themed interface with responsive layout
 
 ## Requirements
 
