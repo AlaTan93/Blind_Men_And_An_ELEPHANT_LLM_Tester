@@ -54,7 +54,7 @@ cover/
 # Translations
 *.mo
 *.pot
-load_api_keys
+
 # Django stuff:
 *.log
 local_settings.py
@@ -82,7 +82,7 @@ target/
 profile_default/
 ipython_config.py
 
-# pyenvload_api_keys
+# pyenv
 #   For a library or package, you might want to ignore these files since the code is
 #   intended to run in multiple environments; otherwise, check them in:
 # .python-version
