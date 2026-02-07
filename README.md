@@ -1,6 +1,7 @@
 # Blind Men And An ELEPHANT - LLM Tester
 
 Utilising ELEPHANT: Measuring and understanding social sycophancy in LLMs, the goal is to simultaneously test LLMs for sycophancy, and to score them via LLM-as-a-Judge and per human evaluation via UI.
+(https://arxiv.org/abs/2505.13995v2)
 
 ## Progress
 
