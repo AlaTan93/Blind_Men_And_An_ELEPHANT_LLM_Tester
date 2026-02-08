@@ -1,8 +1,9 @@
 """Options tab for managing API keys."""
-import customtkinter as ctk
-from tkinter import messagebox
-import json
 import os
+
+import customtkinter as ctk
+from dotenv import dotenv_values, set_key
+from tkinter import messagebox
 
 
 class APIKeyTab:
@@ -49,7 +50,7 @@ class APIKeyTab:
                                 font=("Arial", 14), height=40)
         save_btn.pack(pady=20)
 
-    def create_api_key_field(self, parent, label_text, key_name, row):
+    def create_api_key_field(self, parent, label_text, key_name, row, placeholder_text="Enter API key here..."):
         """Create an API key input field with show/hide functionality.
 
         Args:
@@ -63,7 +64,7 @@ class APIKeyTab:
         label.grid(row=row, column=0, pady=15, padx=20, sticky="w")
 
         # Entry field (password style)
-        entry = ctk.CTkEntry(parent, placeholder_text="Enter API key here...",
+        entry = ctk.CTkEntry(parent, placeholder_text=placeholder_text,
                             show="*", width=400, height=35, font=("Arial", 11))
         entry.grid(row=row, column=1, pady=15, padx=10, sticky="ew")
         entry.insert(0, self.api_keys[key_name])
@@ -90,38 +91,43 @@ class APIKeyTab:
         parent.grid_columnconfigure(1, weight=1)
 
     def save_api_keys(self):
-        """Save API keys to file."""
-        self.api_keys["openai"] = self.openai_entry.get()
-        self.api_keys["azure"] = self.azure_entry.get()
-        self.api_keys["claude"] = self.claude_entry.get()
+        """Save API keys to .env file."""
+        self.api_keys["openai"] = self.openai_entry.get() # type: ignore
+        self.api_keys["azure"] = self.azure_entry.get() # type: ignore
+        self.api_keys["claude"] = self.claude_entry.get() # type:ignore
 
-        # Save to file in project root
-        config_file = self._get_config_path()
+        env_file = self._get_env_path()
         try:
-            with open(config_file, "w") as f:
-                json.dump(self.api_keys, f, indent=2)
+            # Create .env from template if it doesn't exist
+            if not os.path.exists(env_file):
+                open(env_file, "w").close()
+            set_key(env_file, "OPENAI_KEY", self.api_keys["openai"])
+            set_key(env_file, "AZURE_KEY", self.api_keys["azure"])
+            set_key(env_file, "CLAUDE_KEY", self.api_keys["claude"])
             messagebox.showinfo("Success", "API keys saved successfully!")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to save API keys: {str(e)}")
 
     def load_api_keys(self):
-        """Load API keys from file."""
-        config_file = self._get_config_path()
-        if os.path.exists(config_file):
+        """Load API keys from .env file."""
+        env_file = self._get_env_path()
+        if os.path.exists(env_file):
             try:
-                with open(config_file, "r") as f:
-                    self.api_keys = json.load(f)
+                values = dotenv_values(env_file)
+                self.api_keys["openai"] = values.get("OPENAI_KEY", "")
+                self.api_keys["azure"] = values.get("AZURE_KEY", "")
+                self.api_keys["claude"] = values.get("CLAUDE_KEY", "")
             except Exception as e:
                 print(f"Failed to load API keys: {str(e)}")
 
-    def _get_config_path(self):
-        """Get the path to the config file.
+    def _get_env_path(self):
+        """Get the path to the .env file.
 
         Returns:
-            str: Path to config.json in project root
+            str: Path to .env in project root
         """
         # Go up from src/api_key_tab/ to project root
         return os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-            "config.json"
+            ".env"
         )

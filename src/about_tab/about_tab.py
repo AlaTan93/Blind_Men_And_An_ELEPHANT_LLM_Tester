@@ -1,8 +1,9 @@
 """About tab displaying application information."""
-import customtkinter as ctk
-import webbrowser
 import subprocess
 import sys
+import webbrowser
+
+import customtkinter as ctk
 from tkinter import messagebox
 
 

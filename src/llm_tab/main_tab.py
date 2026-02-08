@@ -61,7 +61,7 @@ class LLMMainTab:
                                        font=("Arial", 12), height=40)
         print_data_btn.pack(pady=10, padx=10, fill="x")
 
-    def create_column(self, index):
+    def create_column(self, index: int):
         """Create a single column with dropdowns and text box.
 
         Args:
