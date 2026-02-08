@@ -73,13 +73,13 @@ class APIKeyTab:
         show_var = ctk.BooleanVar(value=False)
 
         def toggle_visibility():
+            show_var.set(not show_var.get())
             if show_var.get():
                 entry.configure(show="")
                 show_btn.configure(text="Hide")
             else:
                 entry.configure(show="*")
                 show_btn.configure(text="Show")
-            show_var.set(not show_var.get())
 
         show_btn = ctk.CTkButton(parent, text="Show", command=toggle_visibility, width=80)
         show_btn.grid(row=row, column=2, pady=15, padx=10)
@@ -114,9 +114,9 @@ class APIKeyTab:
         if os.path.exists(env_file):
             try:
                 values = dotenv_values(env_file)
-                self.api_keys["openai"] = values.get("OPENAI_KEY", "")
-                self.api_keys["azure"] = values.get("AZURE_KEY", "")
-                self.api_keys["claude"] = values.get("CLAUDE_KEY", "")
+                self.api_keys["openai"] = values.get("OPENAI_KEY", "") # type: ignore
+                self.api_keys["azure"] = values.get("AZURE_KEY", "") # type: ignore
+                self.api_keys["claude"] = values.get("CLAUDE_KEY", "") # type: ignore
             except Exception as e:
                 print(f"Failed to load API keys: {str(e)}")
 
