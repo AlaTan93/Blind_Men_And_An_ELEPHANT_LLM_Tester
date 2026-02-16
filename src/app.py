@@ -4,6 +4,9 @@ import customtkinter as ctk
 from .llm_tab import LLMMainTab
 from .api_key_tab import APIKeyTab
 from .about_tab import AboutTab
+from .logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class LLMTesterApp(ctk.CTk):
@@ -31,7 +34,9 @@ class LLMTesterApp(ctk.CTk):
         self.tabview.add("Options")
         self.tabview.add("About")
 
-        # Setup each tab with its respective module
-        self.main_tab = LLMMainTab(self.tabview.tab("Main"))
+        # Setup each tab — Options first so api_keys are loaded before Main uses them
+        logger.info("Initializing application tabs")
         self.options_tab = APIKeyTab(self.tabview.tab("Options"))
+        self.main_tab = LLMMainTab(self.tabview.tab("Main"))
         self.about_tab = AboutTab(self.tabview.tab("About"))
+        logger.info("Application ready")

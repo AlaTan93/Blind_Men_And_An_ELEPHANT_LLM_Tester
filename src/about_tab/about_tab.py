@@ -19,6 +19,7 @@ class AboutTab:
         self.parent = parent
         self.setup_ui()
 
+
     def open_url(self, url):
         """Open URL in browser with cross-platform support.
 
@@ -34,6 +35,7 @@ class AboutTab:
                 webbrowser.open(url)
         except Exception as e:
             messagebox.showwarning("Web browser cannot be opened")
+
 
     def setup_ui(self):
         """Setup the about tab UI."""
