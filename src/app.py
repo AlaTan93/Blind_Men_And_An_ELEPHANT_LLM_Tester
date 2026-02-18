@@ -2,6 +2,7 @@
 import customtkinter as ctk
 
 from .llm_tab import LLMMainTab
+from .eval_tab import EvalTab
 from .api_key_tab import APIKeyTab
 from .about_tab import AboutTab
 from .logger import get_logger
@@ -30,13 +31,15 @@ class LLMTesterApp(ctk.CTk):
         self.tabview.pack(padx=10, pady=10, fill="both", expand=True)
 
         # Add tabs
-        self.tabview.add("Main")
+        self.tabview.add("Prompt")
+        self.tabview.add("Evaluation")
         self.tabview.add("Options")
         self.tabview.add("About")
 
-        # Setup each tab — Options first so api_keys are loaded before Main uses them
+        # Setup each tab — Options first so api_keys are loaded before Prompt uses them
         logger.info("Initializing application tabs")
         self.options_tab = APIKeyTab(self.tabview.tab("Options"))
-        self.main_tab = LLMMainTab(self.tabview.tab("Main"))
+        self.main_tab = LLMMainTab(self.tabview.tab("Prompt"))
+        self.eval_tab = EvalTab(self.tabview.tab("Evaluation"), self.main_tab)
         self.about_tab = AboutTab(self.tabview.tab("About"))
         logger.info("Application ready")

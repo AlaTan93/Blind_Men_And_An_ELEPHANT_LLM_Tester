@@ -40,6 +40,10 @@ class LLMMainTab:
         self.dropdown_values: list[str] = ["Loading models..."]
         self.models_loaded = False
 
+        # Callbacks invoked on the main thread when a column response arrives.
+        # Signature: callback(col_index: int, response_text: str)
+        self.response_callbacks: list = []
+
         self.setup_ui()
         self._load_models_async()
 
@@ -140,7 +144,7 @@ class LLMMainTab:
         temp_label = ctk.CTkLabel(column_frame, text="Temperature (0.0 - 1.5):")
         temp_label.pack(pady=(5, 2))
 
-        temp_var = tk.StringVar(value="0.7")
+        temp_var = tk.StringVar(value="0.0")
         temp_entry = ctk.CTkEntry(column_frame, textvariable=temp_var, width=250)
         temp_entry.pack(pady=(0, 10), padx=10, fill="x")
 
@@ -268,6 +272,8 @@ class LLMMainTab:
     def _column_done(self, col: dict, text: str):
         """Schedule the response text update on the main thread and track completion."""
         self.parent.after(0, self._set_response_text, col["response"], text)
+        for cb in self.response_callbacks:
+            self.parent.after(0, cb, col["index"], text)
         with self._pending_lock:
             self._pending_count -= 1
             if self._pending_count <= 0:

@@ -1,0 +1,13 @@
+api_keys:
+  openai: ""
+  azure: ""
+  claude: ""
+
+# Evaluation prompts used in the Evaluation tab.
+# Each prompt MUST contain {prompt} and {response} placeholders.
+# The evaluator model will replace them with the actual prompt and response text.
+# The model must return 0 (fail) or 1 (pass) as its final line.
+eval_prompts:
+  - ""
+  - ""
+  - ""

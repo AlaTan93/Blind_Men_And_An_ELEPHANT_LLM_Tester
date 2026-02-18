@@ -146,6 +146,7 @@ venv.bak/
 
 # API Keys and Configuration
 config.json
+config.yaml
 
 # Spyder project settings
 .spyderproject

@@ -2,7 +2,7 @@
 import os
 
 import customtkinter as ctk
-from dotenv import dotenv_values, set_key
+import yaml
 from tkinter import messagebox
 
 from src.logger import get_logger
@@ -100,48 +100,53 @@ class APIKeyTab:
 
 
     def save_api_keys(self):
-        """Save API keys to .env file."""
+        """Save API keys to config.yaml file."""
         api_keys["openai"] = self.openai_entry.get() # type: ignore
         api_keys["azure"] = self.azure_entry.get() # type: ignore
         api_keys["claude"] = self.claude_entry.get() # type:ignore
 
-        env_file = self._get_env_path()
+        config_file = self._get_config_path()
         try:
-            # Create .env from template if it doesn't exist
-            if not os.path.exists(env_file):
-                open(env_file, "w").close()
-            set_key(env_file, "OPENAI_KEY", api_keys["openai"])
-            set_key(env_file, "AZURE_KEY", api_keys["azure"])
-            set_key(env_file, "CLAUDE_KEY", api_keys["claude"])
+            config = {
+                "api_keys": {
+                    "openai": api_keys["openai"],
+                    "azure": api_keys["azure"],
+                    "claude": api_keys["claude"],
+                }
+            }
+            with open(config_file, "w") as f:
+                yaml.dump(config, f, default_flow_style=False)
             messagebox.showinfo("Success", "API keys saved successfully!")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to save API keys: {str(e)}")
 
 
     def load_api_keys(self):
-        """Load API keys from .env file."""
-        env_file = self._get_env_path()
-        if os.path.exists(env_file):
+        """Load API keys from config.yaml file."""
+        config_file = self._get_config_path()
+        if os.path.exists(config_file):
             try:
-                values = dotenv_values(env_file)
-                api_keys["openai"] = values.get("OPENAI_KEY", "") # type: ignore
-                api_keys["azure"] = values.get("AZURE_KEY", "") # type: ignore
-                api_keys["claude"] = values.get("CLAUDE_KEY", "") # type: ignore
-                logger.info("API keys loaded from %s", env_file)
+                with open(config_file, "r") as f:
+                    config = yaml.safe_load(f) or {}
+                keys = config.get("api_keys", {})
+                api_keys["openai"] = keys.get("openai", "") # type: ignore
+                api_keys["azure"] = keys.get("azure", "") # type: ignore
+                api_keys["claude"] = keys.get("claude", "") # type: ignore
+                logger.info("API keys loaded from %s", config_file)
             except Exception as e:
                 logger.error("Failed to load API keys: %s", e)
         else:
-            logger.warning("No .env file found at %s", env_file)
+            logger.warning("No config.yaml file found at %s", config_file)
 
 
-    def _get_env_path(self):
-        """Get the path to the .env file.
+    def _get_config_path(self):
+        """Get the path to the config.yaml file.
 
         Returns:
-            str: Path to .env in project root
+            str: Path to config.yaml in project root
         """
         # Go up from src/api_key_tab/ to project root
         return os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-            ".env"
+            "config.yaml"
         )
